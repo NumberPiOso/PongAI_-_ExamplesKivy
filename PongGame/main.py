@@ -48,6 +48,9 @@ class PongGame(Widget):
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
 
+        # player 2 follows the ball.
+        self.player2.center_y = self.ball.y
+        
         # went of to a side to score point?
         if self.ball.x < self.x:
             self.player2.score += 1
@@ -55,6 +58,11 @@ class PongGame(Widget):
         if self.ball.x > self.width:
             self.player1.score += 1
             self.serve_ball(vel=(-4, 0))
+
+    def player_2_follows_ball(self):
+        """This is the first step to do a ML player, is simply
+            instructions for player two to follow the ball."""
+        self.player2.center_y = self.ball.y
 
     def on_touch_move(self, touch):
         if touch.x < self.width / 3:
