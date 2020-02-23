@@ -5,6 +5,7 @@ from kivy.properties import (
 )
 from kivy.vector import Vector
 from kivy.clock import Clock
+import numpy as np
 
 
 class PongPaddle(Widget):
@@ -32,6 +33,7 @@ class PongGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
+    max_velocity_paddle = 1
 
     def serve_ball(self, vel=(4, 0)):
         self.ball.center = self.center
@@ -48,9 +50,10 @@ class PongGame(Widget):
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
 
-        # player 2 follows the ball.
-        self.player2.center_y = self.ball.y
-        
+        # player 2 follows the ball with max velocity predefined
+        self.player2.center_y += float(np.clip(self.ball.y-self.player2.center_y, 
+            -self.max_velocity_paddle, self.max_velocity_paddle))
+
         # went of to a side to score point?
         if self.ball.x < self.x:
             self.player2.score += 1
